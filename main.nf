@@ -19,10 +19,14 @@ workflow {
   log.info """
 ************************************************************
 
-
-======================================
-Genomes:      ${params.input}
-Results Path: ${params.outdir}
+Build Sourmash Index
+====================
+Genomes:        ${params.input}
+Taxonomy:       ${params.taxonomy == 'MISSING' ? 'Not provided' : params.taxonomy}
+Scaling Factor: ${params.scaling_factor}
+K-Mer Size:     ${params.kmer_size}
+Batch Size:     ${params.batch_size}
+Results Path:   ${params.outdir}
 
 ************************************************************
 
