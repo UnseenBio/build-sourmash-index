@@ -50,6 +50,7 @@ workflow SOURMASH_BUILD {
       SOURMASH_SKETCH.out.signatures
           .flatten()
           .groupTuple(by: -1)
+          .dump(tag: 'index-library')
           .combine(kmer_sizes)
           .dump(tag: 'index-library')
           .tap { log_index },
