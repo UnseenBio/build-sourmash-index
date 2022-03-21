@@ -17,17 +17,21 @@ workflow SOURMASH_BUILD {
   take:
   genomes
   taxonomy
+  kmer_sizes
+  scaling_factors
 
   main:
 
   def library = genomes.collate(params.batch_size)
 
-  SOURMASH_SKETCH(library)
+  SOURMASH_SKETCH(library, scaling_factors, kmer_sizes.collect())
 
-  SOURMASH_INDEX(
-    SOURMASH_SKETCH.out.signature.collect(),
-    taxonomy
-  )
+  // SOURMASH_INDEX(
+    // SOURMASH_SKETCH.out.signatures.collect()
+      // .combine(scaling_factors)
+      // .combine(kmer_sizes),
+    // taxonomy
+  // )
 
   emit:
   database = SOURMASH_INDEX.out.database
