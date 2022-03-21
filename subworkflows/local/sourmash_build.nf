@@ -30,7 +30,7 @@ workflow SOURMASH_BUILD {
   // We generate sketches of the library for each scaling factor but for all k-mer sizes.
   SOURMASH_SKETCH(
       library.combine(scaling_factors)
-          .combine([kmer_sizes.toList()])
+          .combine([kmer_sizes.collect()])
           .tap { log_sketch }
           // .map { [it[0..(-kmer_sizes.size() - 2)], it[-kmer_sizes.size() - 1], it[(-kmer_sizes.size())..-1]] }
   )

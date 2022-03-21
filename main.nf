@@ -36,6 +36,11 @@ Results Path:    ${params.outdir}
   def kmer_sizes = params.kmer_sizes.split(',')
   def scaling_factors =  params.scaling_factors.split(',')
 
-  SOURMASH_BUILD(genomes, taxonomy, kmer_sizes, scaling_factors)
+  SOURMASH_BUILD(
+      genomes,
+      taxonomy,
+      Channel.fromList(kmer_sizes),
+      Channel.fromList(scaling_factors)
+  )
 
 }
