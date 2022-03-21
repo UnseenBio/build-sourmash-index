@@ -5,11 +5,11 @@ process SOURMASH_INDEX {
         'quay.io/biocontainers/sourmash:4.3.0--hdfd78af_0' }"
 
     input:
-    tuple path(signature, stageAs: 'sketches/*'), scaling_factor, kmer_size
-    path(taxonomy)
+    tuple path(signature, stageAs: 'sketches/*'), val(scaling_factor), val(kmer_size)
+    path taxonomy
 
     output:
-    path(database), emit: database
+    path database, emit: database
 
     script:
     def args = task.ext.args ?: ''
