@@ -31,13 +31,14 @@ workflow SOURMASH_BUILD {
   SOURMASH_SKETCH(
       library.combine(scaling_factors)
           .combine([kmer_sizes.collect()])
-          .map { [it[0..-3], it[-2], it[-1]] }
-          .dump()
+          .map { [it[0..-3], it[-2], it[-1].collect()] }
           .tap { log_sketch }
           // .map { [it[0..(-kmer_sizes.size() - 2)], it[-kmer_sizes.size() - 1], it[(-kmer_sizes.size())..-1]] }
   )
 
-  log_sketch.map { [['...']] + it[1..-1] }.dump(tag: 'sketch-library')
+  // Replace file batch list with something shorter for logging.
+  log_sketch.map { [['...']] + it[1..-1] }
+      .dump(tag: 'sketch-library')
 
   // We have to create a separate index for each scaling factor and each k-mer size.
   SOURMASH_SKETCH.out.signatures
