@@ -47,6 +47,7 @@ workflow SOURMASH_BUILD {
         // We need a flat list as path input to the next process.
         .map { [it.head().flatten(), it.last()] }  // [[signatures], factor]
         .combine(kmer_sizes)  // [[signatures], factor, kmer]
+        .combine(taxonomy)  // [[signatures], factor, kmer, taxonomy]
   
     // Replace file batch list with something shorter for logging.
     index.map { [['signatures']] + it.tail() }
@@ -54,7 +55,7 @@ workflow SOURMASH_BUILD {
 
     // We have to create a separate index for each scaling factor and each k-mer size.
     // This is required by sourmash for constructing an index.
-    SOURMASH_INDEX(index, taxonomy)
+    SOURMASH_INDEX(index)
   
     emit:
     database = SOURMASH_INDEX.out.database
