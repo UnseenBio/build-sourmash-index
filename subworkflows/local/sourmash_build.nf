@@ -48,7 +48,8 @@ workflow SOURMASH_BUILD {
   // This is required by sourmash for constructing an index.
   SOURMASH_INDEX(
       SOURMASH_SKETCH.out.signatures
-          .groupTuple(by: 1)
+          .flatten()
+          .groupTuple(by: -1)
           .combine(kmer_sizes)
           .dump(tag: 'index-library')
           .tap { log_index },
