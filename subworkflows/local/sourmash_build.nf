@@ -48,9 +48,10 @@ workflow SOURMASH_BUILD {
   // This is required by sourmash for constructing an index.
   SOURMASH_INDEX(
       SOURMASH_SKETCH.out.signatures
-          .flatten()
-          .groupTuple(by: -1)
-          .dump(tag: 'index-library')
+          .groupTuple(by: 1)
+          // The output was a list of signatures which was then grouped into a list-of-lists.
+          // We need a flat list as path input to the next process.
+          .map { [it[0].flatten(), it[1]] }
           .combine(kmer_sizes)
           .dump(tag: 'index-library')
           .tap { log_index },
