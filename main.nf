@@ -33,14 +33,14 @@ Results Path:    ${params.outdir}
 """
   def genomes = Channel.fromPath(params.input, checkIfExists: true)
   def taxonomy = params.taxonomy == 'MISSING' ? Channel.fromPath(params.taxonomy) : Channel.fromPath(params.taxonomy, checkIfExists: true)
-  def kmer_sizes = params.kmer_sizes.split(',')
-  def scaling_factors =  params.scaling_factors.split(',')
+  def kmer_sizes = Channel.of(params.kmer_sizes.split(','))
+  def scaling_factors =  Channel.of(params.scaling_factors.split(','))
 
   SOURMASH_BUILD(
       genomes,
       taxonomy,
-      Channel.fromList(kmer_sizes),
-      Channel.fromList(scaling_factors)
+      kmer_sizes,
+      scaling_factors
   )
 
 }
