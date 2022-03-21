@@ -33,6 +33,6 @@ workflow SOURMASH_BUILD {
     // taxonomy
   // )
 
-  emit:
-  database = SOURMASH_INDEX.out.database
+  // emit:
+  // database = SOURMASH_INDEX.out.database
 }
