@@ -30,12 +30,12 @@ workflow SOURMASH_BUILD {
   // We generate sketches of the library for each scaling factor but for all k-mer sizes.
   SOURMASH_SKETCH(
       library
-          .map { it.toList() }
           .combine(scaling_factors)
+          // The combinations also remove the list from the `.collate` batch.
+          .map { [it[0..-2], it[-1]] }
           // We want the cartesian product with the list of k-mer sizes.
           // Needs `.toList().toList()`, don't ask why ¯\_(ツ)_/¯
           .combine(kmer_sizes.toList().toList())
-          .dump()
           // .map { [it[0..-3], it[-2], it[-1]] }
           .tap { log_sketch }
   )
