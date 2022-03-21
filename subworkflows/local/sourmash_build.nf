@@ -44,7 +44,12 @@ workflow SOURMASH_BUILD {
   SOURMASH_SKETCH.out.signatures
       .groupTuple(by: 1)
       .combine(kmer_sizes)
+      .tap { log_index }
+
+  // Replace file batch list with something shorter for logging.
+  log_sketch.map { [['...']] + it[1..-1] }
       .dump(tag: 'index-library')
+
   // SOURMASH_INDEX(
     // SOURMASH_SKETCH.out.signatures.collect()
       // .combine(scaling_factors)
