@@ -5,12 +5,10 @@ process SOURMASH_SKETCH {
         'quay.io/biocontainers/sourmash:4.3.0--hdfd78af_0' }"
 
     input:
-    path(library, stageAs: 'library/*')
-    val scaling_factor
-    val kmer_sizes
+    tuple path(library, stageAs: 'library/*'), val(scaling_factor), val(kmer_sizes)
 
     output:
-    path("sketches/*.sig"), emit: signatures
+    tuple path("sketches/*.sig"), val(scaling_factor), emit: signatures
 
     script:
     // def prefix = task.ext.prefix ?: "${meta.id}"

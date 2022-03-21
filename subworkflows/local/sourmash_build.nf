@@ -24,8 +24,18 @@ workflow SOURMASH_BUILD {
 
   def library = genomes.collate(params.batch_size)
 
-  SOURMASH_SKETCH(library, scaling_factors, kmer_sizes.collect())
+  // We generate sketches of the library for each scaling factor but for all k-mer sizes.
+  SOURMASH_SKETCH(
+      genomes.combine(scaling_factors)
+          .combine(kmer_sizes.collect())
+          .dump(tag: 'sketch-library')
+  )
 
+  // We have to create a separate index for each scaling factor and each k-mer size.
+  SOURMASH_SKETCH.out.signatures
+      .groupTuple(by: 1)
+      .combine(kmer_sizes)
+      .dump(tag: 'index-library')
   // SOURMASH_INDEX(
     // SOURMASH_SKETCH.out.signatures.collect()
       // .combine(scaling_factors)
