@@ -37,7 +37,7 @@ workflow SOURMASH_BUILD {
   )
 
   // Replace file batch list with something shorter for logging.
-  log_sketch.map { [['...']] + it[1..-1] }
+  log_sketch.map { [['genomes']] + it[1..-1] }
       .dump(tag: 'sketch-library')
 
   // We have to create a separate index for each scaling factor and each k-mer size.
@@ -47,7 +47,7 @@ workflow SOURMASH_BUILD {
       .tap { log_index }
 
   // Replace file batch list with something shorter for logging.
-  log_sketch.map { [['...']] + it[1..-1] }
+  log_index.map { [['signatures']] + it[1..-1] }
       .dump(tag: 'index-library')
 
   // SOURMASH_INDEX(
