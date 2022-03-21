@@ -50,6 +50,7 @@ workflow SOURMASH_BUILD {
       SOURMASH_SKETCH.out.signatures
           .groupTuple(by: 1)
           .combine(kmer_sizes)
+          .dump(tag: 'index-library')
           .tap { log_index },
       taxonomy
   )
