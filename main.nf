@@ -21,19 +21,26 @@ workflow {
 
 Build Sourmash Index
 ====================
-Genomes:        ${params.input}
-Taxonomy:       ${params.taxonomy == 'MISSING' ? 'Not provided' : params.taxonomy}
-Scaling Factor: ${params.scaling_factor}
-K-Mer Size:     ${params.kmer_size}
-Batch Size:     ${params.batch_size}
-Results Path:   ${params.outdir}
+Genomes:         ${params.input}
+Taxonomy:        ${params.taxonomy == 'MISSING' ? 'Not provided' : params.taxonomy}
+Scaling Factors: ${params.scaling_factors}
+K-Mer Sizes:     ${params.kmer_sizes}
+Batch Size:      ${params.batch_size}
+Results Path:    ${params.outdir}
 
 ************************************************************
 
 """
   def genomes = Channel.fromPath(params.input, checkIfExists: true)
   def taxonomy = params.taxonomy == 'MISSING' ? Channel.fromPath(params.taxonomy) : Channel.fromPath(params.taxonomy, checkIfExists: true)
+  def kmer_sizes = Channel.of(params.kmer_sizes.split(','))
+  def scaling_factors =  Channel.of(params.scaling_factors.split(','))
 
-  SOURMASH_BUILD(genomes, taxonomy)
+  SOURMASH_BUILD(
+      genomes,
+      taxonomy,
+      kmer_sizes,
+      scaling_factors
+  )
 
 }
