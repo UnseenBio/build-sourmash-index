@@ -45,7 +45,7 @@ workflow SOURMASH_BUILD {
         .groupTuple(by: 1)  // [[[signatures]], factor]
         // The output was a list of signatures which was then grouped into a list-of-lists.
         // We need a flat list as path input to the next process.
-        .map { [it.head().flatten(), it.tail()] }  // [[signatures], factor]
+        .map { [it.head().flatten(), it.last()] }  // [[signatures], factor]
         .combine(kmer_sizes)  // [[signatures], factor, kmer]
   
     // Replace file batch list with something shorter for logging.
