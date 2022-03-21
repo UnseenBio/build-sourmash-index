@@ -23,7 +23,7 @@ Build Sourmash Index
 ====================
 Genomes:         ${params.input}
 Taxonomy:        ${params.taxonomy == 'MISSING' ? 'Not provided' : params.taxonomy}
-Scaling Factors: ${params.scaling_factor}
+Scaling Factors: ${params.scaling_factors}
 K-Mer Sizes:     ${params.kmer_sizes}
 Batch Size:      ${params.batch_size}
 Results Path:    ${params.outdir}
@@ -33,8 +33,10 @@ Results Path:    ${params.outdir}
 """
   def genomes = Channel.fromPath(params.input, checkIfExists: true)
   def taxonomy = params.taxonomy == 'MISSING' ? Channel.fromPath(params.taxonomy) : Channel.fromPath(params.taxonomy, checkIfExists: true)
-  def kmer_sizes = Channel.fromList(params.kmer_sizes.split(','))
-  def scaling_factors = Channel.fromList(params.scaling_factors.split(','))
+  println params.kmer_sizes.split(',')
+  println params.scaling_factors.split(',')
+  def kmer_sizes = Channel.fromList()
+  def scaling_factors = Channel.fromList()
 
   SOURMASH_BUILD(genomes, taxonomy, kmer_sizes, scaling_factors)
 
