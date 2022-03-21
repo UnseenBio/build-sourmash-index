@@ -31,8 +31,7 @@ workflow SOURMASH_BUILD {
   SOURMASH_SKETCH(
       library.combine(scaling_factors)
           .combine([kmer_sizes.collect()])
-          .dump()
-          .map { [it[0..-3], it[-2], it[-1].var] }
+          .map { [it[0..-3], it[-2], it[-1]] }
           .tap { log_sketch }
           // .map { [it[0..(-kmer_sizes.size() - 2)], it[-kmer_sizes.size() - 1], it[(-kmer_sizes.size())..-1]] }
   )

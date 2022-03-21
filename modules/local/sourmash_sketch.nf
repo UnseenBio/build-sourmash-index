@@ -13,7 +13,7 @@ process SOURMASH_SKETCH {
     script:
     // def prefix = task.ext.prefix ?: "${meta.id}"
     def args = task.ext.args ?: 'dna'
-    def kmers = kmer_sizes.collect { "k=${it}" }.join(',')
+    def kmers = kmer_sizes.var.collect { "k=${it}" }.join(',')
     def arguments="scaled=${scaling_factor},${kmers}"
     """
     ls library/* > library.txt
