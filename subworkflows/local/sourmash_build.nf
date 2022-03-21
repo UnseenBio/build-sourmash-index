@@ -21,12 +21,15 @@ workflow SOURMASH_BUILD {
   scaling_factors
 
   main:
-
+  /* Let sourmash sketch `batch_size` signatures at a time.
+   * This is a compromise between sourmash being single threaded and the overhead
+   * of starting a separate process (container) for each batch.
+   */
   def library = genomes.collate(params.batch_size)
 
   // We generate sketches of the library for each scaling factor but for all k-mer sizes.
   SOURMASH_SKETCH(
-      genomes.combine(scaling_factors)
+      library.combine(scaling_factors)
           .combine(kmer_sizes.collect())
           .dump(tag: 'sketch-library')
   )
