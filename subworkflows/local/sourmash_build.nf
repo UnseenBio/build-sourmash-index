@@ -33,7 +33,6 @@ workflow SOURMASH_BUILD {
           .combine([kmer_sizes.collect()])
           .map { [it[0..-3], it[-2], it[-1].val] }
           .tap { log_sketch }
-          // .map { [it[0..(-kmer_sizes.size() - 2)], it[-kmer_sizes.size() - 1], it[(-kmer_sizes.size())..-1]] }
   )
 
   // Replace file batch list with something shorter for logging.
@@ -41,22 +40,19 @@ workflow SOURMASH_BUILD {
       .dump(tag: 'sketch-library')
 
   // We have to create a separate index for each scaling factor and each k-mer size.
-  SOURMASH_SKETCH.out.signatures
-      .groupTuple(by: 1)
-      .combine(kmer_sizes)
-      .tap { log_index }
+  // This is required by sourmash for constructing an index.
+  SOURMASH_INDEX(
+      SOURMASH_SKETCH.out.signatures
+          .groupTuple(by: 1)
+          .combine(kmer_sizes)
+          .tap { log_index },
+      taxonomy
+  )
 
   // Replace file batch list with something shorter for logging.
   log_index.map { [['signatures']] + it[1..-1] }
       .dump(tag: 'index-library')
 
-  // SOURMASH_INDEX(
-    // SOURMASH_SKETCH.out.signatures.collect()
-      // .combine(scaling_factors)
-      // .combine(kmer_sizes),
-    // taxonomy
-  // )
-
-  // emit:
-  // database = SOURMASH_INDEX.out.database
+  emit:
+  database = SOURMASH_INDEX.out.database
 }
